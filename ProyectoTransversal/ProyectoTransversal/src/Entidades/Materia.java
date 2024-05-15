@@ -1,6 +1,5 @@
 package Entidades;
 
-
 public class Materia {
     private int idMateria;
     private String nombre;

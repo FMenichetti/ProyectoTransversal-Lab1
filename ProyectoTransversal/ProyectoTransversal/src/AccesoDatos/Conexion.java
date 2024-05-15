@@ -30,5 +30,4 @@ public class Conexion {
     public Conexion() {
     }
 
-    
 }
