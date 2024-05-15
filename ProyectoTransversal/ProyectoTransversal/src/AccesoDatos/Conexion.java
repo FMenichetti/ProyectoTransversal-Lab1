@@ -30,4 +30,16 @@ public class Conexion {
     public Conexion() {
     }
 
+    public Connection buscarConexion(){
+        if ( conexion == null ) {
+            try {
+                //Cargamos clases de maria db que implementan JDBC
+                Class.forName("org.mariadb.jdbc.Driver");
+                conexion = DriverManager.getConnection(url, user, pass);
+            } catch (SQLException | ClassNotFoundException e) {
+                System.out.println("No se puede conectar o no se puede cargar el driver");
+            }
+        } 
+        return conexion;
+    }
 }
