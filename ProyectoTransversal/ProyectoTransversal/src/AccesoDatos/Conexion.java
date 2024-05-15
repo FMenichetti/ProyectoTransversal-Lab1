@@ -5,7 +5,7 @@
  */
 package AccesoDatos;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,6 +19,7 @@ public class Conexion {
     private String user;
     private String pass;
     private String url;
+    Connection conexion = null;
 
     public Conexion(String user, String pass, String url) {
         this.user = user;
