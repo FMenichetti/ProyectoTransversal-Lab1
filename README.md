@@ -1,2 +1,0 @@
-# ProyectoTransversal-Lab1
- 
