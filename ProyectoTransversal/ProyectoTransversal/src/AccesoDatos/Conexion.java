@@ -16,21 +16,18 @@ import java.sql.Statement;
  */
 public class Conexion {
 
-    private String user;
-    private String pass;
-    private String url;
+    private static String user = "root";
+    private static String pass = "";
+    private static String url = "jdbc:mariadb://localhost/ejemplo";
+    private static String db = "universidadULP_grupo4";
     Connection conexion = null;
 
-    public Conexion(String user, String pass, String url) {
-        this.user = user;
-        this.pass = pass;
-        this.url = url;
-    }
-
+    
+ //Constructor
     public Conexion() {
     }
 
-    public Connection buscarConexion(){
+    public Connection getConexion(){
         if ( conexion == null ) {
             try {
                 //Cargamos clases de maria db que implementan JDBC
