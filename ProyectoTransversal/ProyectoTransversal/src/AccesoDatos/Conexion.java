@@ -20,14 +20,14 @@ public class Conexion {
     private static String pass = "";
     private static String url = "jdbc:mariadb://localhost/ejemplo";
     private static String db = "universidadULP_grupo4";
-    Connection conexion = null;
+    private static Connection conexion = null;
 
     
  //Constructor
-    public Conexion() {
+    private Conexion() {
     }
 
-    public Connection getConexion(){
+    public static Connection getConexion(){
         if ( conexion == null ) {
             try {
                 //Cargamos clases de maria db que implementan JDBC
