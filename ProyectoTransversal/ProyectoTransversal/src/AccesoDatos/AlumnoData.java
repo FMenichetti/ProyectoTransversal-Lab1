@@ -39,7 +39,7 @@ public class AlumnoData {
             //el resultset empieza detras de la primera columna y se fija si tiene un columna al frente
             //devuelve booleano
             if (rs.next()) {
-                JOptionPane.showMessageDialog(null, "Alumno añadido");
+                JOptionPane.showMessageDialog(null, "Alumno añadido");  
 
             }
             //cerramos la conexion
@@ -163,12 +163,12 @@ public class AlumnoData {
             ps.setString(3, alumno.getNombre());
             ps.setDate(4, Date.valueOf(alumno.getFechaNacimiento()));
             ps.setInt(5, alumno.getIdAlumno());
+            
             int exito = ps.executeUpdate();
 
             if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Alumno modificado");
             } else {
-
                 JOptionPane.showMessageDialog(null, "El alumno no existe");
             }
 
