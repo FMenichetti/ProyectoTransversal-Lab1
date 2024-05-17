@@ -15,10 +15,8 @@ public class Main {
                 
         // EMPEZAMOS A PROBAR LOS METODOS
         AlumnoData aluData = new AlumnoData();
-        aluData.guardarAlumno(a1);
-        aluData.guardarAlumno(a3);
-        aluData.guardarAlumno(a2);
-        aluData.guardarAlumno(a4);
+        //aluData.guardarAlumno(a1);
+        aluData.buscarAlumno(3);
         
     }
 }

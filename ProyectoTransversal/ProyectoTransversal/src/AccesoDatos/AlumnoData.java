@@ -6,6 +6,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,11 @@ public class AlumnoData {
             }
             //cerramos la conexion
             ps.close();
-        } catch (SQLException S) {
+        } 
+        catch(SQLIntegrityConstraintViolationException x){
+            JOptionPane.showMessageDialog(null, "El el alumno ya esta cargado");
+        }
+        catch (SQLException S) {
             JOptionPane.showMessageDialog(null, "Error al acceder a la alumno "+S);
 
         } catch (Exception e) {
