@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 15-05-2024 a las 23:23:23
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: May 17, 2024 at 08:57 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `universidadulp_grupo4`
+-- Database: `universidadulp_grupo4`
 --
 CREATE DATABASE IF NOT EXISTS `universidadulp_grupo4` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `universidadulp_grupo4`;
@@ -26,7 +26,7 @@ USE `universidadulp_grupo4`;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `alumno`
+-- Table structure for table `alumno`
 --
 
 CREATE TABLE `alumno` (
@@ -41,7 +41,7 @@ CREATE TABLE `alumno` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `inscripcion`
+-- Table structure for table `inscripcion`
 --
 
 CREATE TABLE `inscripcion` (
@@ -54,7 +54,7 @@ CREATE TABLE `inscripcion` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `materia`
+-- Table structure for table `materia`
 --
 
 CREATE TABLE `materia` (
@@ -65,18 +65,18 @@ CREATE TABLE `materia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `alumno`
+-- Indexes for table `alumno`
 --
 ALTER TABLE `alumno`
   ADD PRIMARY KEY (`idAlumno`),
   ADD UNIQUE KEY `dni` (`dni`);
 
 --
--- Indices de la tabla `inscripcion`
+-- Indexes for table `inscripcion`
 --
 ALTER TABLE `inscripcion`
   ADD PRIMARY KEY (`idInscripto`),
@@ -84,39 +84,39 @@ ALTER TABLE `inscripcion`
   ADD KEY `idMateria` (`idMateria`);
 
 --
--- Indices de la tabla `materia`
+-- Indexes for table `materia`
 --
 ALTER TABLE `materia`
   ADD PRIMARY KEY (`idMateria`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `alumno`
+-- AUTO_INCREMENT for table `alumno`
 --
 ALTER TABLE `alumno`
   MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `inscripcion`
+-- AUTO_INCREMENT for table `inscripcion`
 --
 ALTER TABLE `inscripcion`
   MODIFY `idInscripto` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `materia`
+-- AUTO_INCREMENT for table `materia`
 --
 ALTER TABLE `materia`
   MODIFY `idMateria` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `inscripcion`
+-- Constraints for table `inscripcion`
 --
 ALTER TABLE `inscripcion`
   ADD CONSTRAINT `inscripcion_ibfk_1` FOREIGN KEY (`idAlumno`) REFERENCES `alumno` (`idAlumno`),

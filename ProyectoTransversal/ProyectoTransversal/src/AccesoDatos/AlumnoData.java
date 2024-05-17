@@ -30,7 +30,7 @@ public class AlumnoData {
             ps.setInt(1, alumno.getDni());
             ps.setString(2, alumno.getApellido());
             ps.setString(3, alumno.getNombre());
-            ps.setDate(5, Date.valueOf(alumno.getFechaNacimiento()));
+            ps.setDate(4, Date.valueOf(alumno.getFechaNacimiento()));
             ps.setBoolean(5, alumno.isEstado());
             ps.executeUpdate();
             ResultSet rs = ps.getGeneratedKeys();
@@ -44,7 +44,7 @@ public class AlumnoData {
             //cerramos la conexion
             ps.close();
         } catch (SQLException S) {
-            JOptionPane.showMessageDialog(null, "Error Error al acceder a la tabla alumno");
+            JOptionPane.showMessageDialog(null, "Error al acceder a la alumno "+S);
 
         } catch (Exception e) {
             System.out.println("error general");
