@@ -1,6 +1,8 @@
 package Entidades;
 
 import AccesoDatos.AlumnoData;
+import AccesoDatos.InscripcionData;
+import AccesoDatos.MateriaData;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +39,77 @@ public class Main {
 //        Alumno a5 = aluData.buscarAlumnoPorDni(3723123);
 //        aluData.eliminarAlumno(a5.getIdAlumno());
 
-    // ENTREGA 2
+        // ENTREGA 2
+        Materia m1 = new Materia("Matematicas", 1, true);
+        Materia m2 = new Materia("EDA", 1, true);
+        Materia m3 = new Materia("Laboratorio 1", 1, true);
+        Materia m4 = new Materia("Ingenieria de Software", 3, true);
+        
+        //EMPEZAMOS A PROBAR LOS METODOS
+        MateriaData md = new MateriaData();
+        //md.guardarMateria(m1);
+        //md.guardarMateria(m2);
+        //md.guardarMateria(m3);
+        //md.guardarMateria(m4);
+        
+        //System.out.println("Materia buscada: " + md.buscarMateria(3));
+        
+        
+        
+        //Materia m5 = md.buscarMateria(4);
+        //m5.setNombre("Ingles");
+        //md.modificarMateria(m5);
+        
+        //md.eliminarMateria(3);
+        
+//        for (Materia materia : md.listarMateria()) {
+//            System.out.println(materia);
+//        }
+        
+//        Alumno a6 = aluData.buscarAlumno(1);
+//        Materia m6 = md.buscarMateria(4);
+//        
+//        Inscripcion i1 = new Inscripcion(a6, m6, 5);
+          InscripcionData iData1 = new InscripcionData();
+        
+        //iData1.guardarInscripcion(i1);
+        
 
-    }
+//        for (Inscripcion ob : iData1.obtenerInscripciones()) {
+//            System.out.println(ob);
+//        }
+
+//        for (Inscripcion oba2 : iData1.obtenerInscripcionesPorAlumno(1)) {
+//            System.out.println(oba2);
+//        }
+
+         
+//        for (Materia oba3 : iData1.obtenerMateriasCursadas(1)) {
+//             System.out.println(oba3);
+//        }
+
+//          for (Materia oba4 : iData1.obtenerMateriasNOCursadas(1)) {
+//             System.out.println(oba4);
+//        }
+
+//        for (Inscripcion oba5 : iData1.obtenerInscripciones()) {
+//             if (oba5.getIdInscripcion() == 17) {
+//                iData1.borrarInscripcionMateriaAlumno(oba5.getAlumno().getIdAlumno(), oba5.getMateria().getIdMateria());
+//                break;
+//            }
+//        }
+
+//        for (Inscripcion oba6 :iData1.obtenerInscripciones()) {
+//             if (oba6.getIdInscripcion() == 18) {
+//                iData1.actualizarNota(oba6.getAlumno().getIdAlumno(), oba6.getMateria().getIdMateria(), 7.5);
+//                break;
+//            }
+//        }
+        
+          for (Alumno oba7 : iData1.obtenerAlumnosXMaterias(1)) {
+              System.out.println(oba7);
+            }
+        }
+        
+    
 }

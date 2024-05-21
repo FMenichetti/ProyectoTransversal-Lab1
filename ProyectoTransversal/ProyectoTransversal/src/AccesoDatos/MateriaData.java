@@ -84,10 +84,10 @@ public class MateriaData {
 
         try {
             ps = con.prepareStatement(sql);
-            ps.setInt(1, materia.getIdMateria());
-            ps.setString(2, materia.getNombre());
-            ps.setInt(3, materia.getAnio());
-            ps.setBoolean(4, materia.isEstado());
+            ps.setInt(4, materia.getIdMateria());
+            ps.setString(1, materia.getNombre());
+            ps.setInt(2, materia.getAnio());
+            ps.setBoolean(3, materia.isEstado());
             int exito = ps.executeUpdate();
 
             if (exito == 1) {

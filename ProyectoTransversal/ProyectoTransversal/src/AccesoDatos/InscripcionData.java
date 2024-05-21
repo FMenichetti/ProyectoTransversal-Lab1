@@ -12,15 +12,19 @@ import javax.swing.JOptionPane;
 
 public class InscripcionData {
 
-    Connection con;
+    Connection con = null;
     MateriaData matData;
     AlumnoData aluData;
 
     public InscripcionData() {
+        con = Conexion.getConexion();
+        aluData = new AlumnoData();
+        matData = new MateriaData();
     }
 
     public void guardarInscripcion(Inscripcion insc) {
-        String sql = "INSERT INTO (`nota`, `idAlumno`, `idMateria`) VALUES (?,?,?) ";
+        
+        String sql = "INSERT INTO inscripcion (`nota`, `idAlumno`, `idMateria`) VALUES (?,?,?); ";
         try {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setDouble(1, insc.getNota());
@@ -43,13 +47,13 @@ public class InscripcionData {
         List<Inscripcion> inscripciones = new ArrayList<Inscripcion>();
         String sql = "SELECT * FROM inscripcion";
         try {
-            PreparedStatement ps = con.prepareCall(sql);
+            PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Inscripcion inscripcion = new Inscripcion();
                 inscripcion.setIdInscripcion(rs.getInt("idInscripto"));
                 inscripcion.setNota(rs.getInt("nota"));
-                Alumno alu = aluData.buscarAlumno(rs.getInt("idInscripto"));
+                Alumno alu = aluData.buscarAlumno(rs.getInt("idAlumno"));
                 Materia mat = matData.buscarMateria(rs.getInt("IdMateria"));
                 inscripcion.setAlumno(alu);
                 inscripcion.setMateria(mat);
@@ -68,14 +72,14 @@ public class InscripcionData {
         List<Inscripcion> inscripciones = new ArrayList<Inscripcion>();
         String sql = "SELECT * FROM inscripcion where idAlumno = ?;";
         try {
-            PreparedStatement ps = con.prepareCall(sql);
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Inscripcion inscripcion = new Inscripcion();
                 inscripcion.setIdInscripcion(rs.getInt("idInscripto"));
                 inscripcion.setNota(rs.getInt("nota"));
-                Alumno alu = aluData.buscarAlumno(rs.getInt("idInscripto"));
+                Alumno alu = aluData.buscarAlumno(rs.getInt("idAlumno"));
                 Materia mat = matData.buscarMateria(rs.getInt("IdMateria"));
                 inscripcion.setAlumno(alu);
                 inscripcion.setMateria(mat);
@@ -92,10 +96,10 @@ public class InscripcionData {
 
     public List<Materia> obtenerMateriasCursadas(int id) {
         List<Materia> materias = new ArrayList<Materia>();
-        String sql = "SELECT incripcion.idMateria, nombre, anio FROM inscripcion, materia "
-                + "WHERE incripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?;";
+        String sql = "SELECT inscripcion.idMateria, nombre, anio FROM inscripcion, materia "
+                + "WHERE inscripcion.idMateria = materia.idMateria AND inscripcion.idAlumno = ?;";
         try {
-            PreparedStatement ps = con.prepareCall(sql);
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -119,7 +123,7 @@ public class InscripcionData {
         String sql = "SELECT * FROM materia WHERE estado=1 AND idMateria not in"
                 + "(SELECT idMateria FROM inscripcion where idAlumno = ?);";
         try {
-            PreparedStatement ps = con.prepareCall(sql);
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -140,11 +144,11 @@ public class InscripcionData {
 
     public List<Alumno> obtenerAlumnosXMaterias(int idMateria) {
         List<Alumno> alumnosLista = new ArrayList<Alumno>();
-        String sql = "SELECT a.idAlumno, nombre, apellido, fechaNacimiento, estado"
-                + "FROM inscripcion i, alumno a WHERE i.idAlumno = a.idAlumno"
-                + "AND idMateria = ? AND a.estado=1;";
+        String sql = "SELECT a.idAlumno, nombre, apellido, fechaNacimiento, estado "
+                + "FROM inscripcion i, alumno a WHERE i.idAlumno = a.idAlumno "
+                + "AND i.idMateria = ? AND a.estado = 1;";
         try {
-            PreparedStatement ps = con.prepareCall(sql);
+            PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idMateria);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -153,7 +157,7 @@ public class InscripcionData {
                 alumno.setIdAlumno(rs.getInt("idAlumno"));
                 alumno.setApellido(rs.getString("apellido"));
                 alumno.setNombre(rs.getString("nombre"));
-                alumno.setFechaNacimiento(rs.getDate("fechanacimiento").toLocalDate());
+                alumno.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
                 alumno.setEstado(true);
                 alumnosLista.add(alumno);
             }
@@ -166,7 +170,7 @@ public class InscripcionData {
     }
 
     public void borrarInscripcionMateriaAlumno(int idAlumno, int idMateria) {
-        String sql= "DELETE FROM incripcion WHERE idAlumno = ? and idMateria = ?;";
+        String sql= "DELETE FROM inscripcion WHERE idAlumno = ? and idMateria = ?;";
         
         try {
             PreparedStatement ps = con.prepareStatement(sql);
@@ -174,7 +178,7 @@ public class InscripcionData {
             ps.setInt(2, idMateria);
             int filas=ps.executeUpdate();
             if (filas>0) {
-                JOptionPane.showMessageDialog(null, "Incripcion borrada");
+                JOptionPane.showMessageDialog(null, "Inscripcion borrada");
             }
             ps.close();
             
@@ -195,7 +199,7 @@ public class InscripcionData {
             ps.setDouble(3, idMateria);
             int filas=ps.executeUpdate();
             if (filas>0) {
-                JOptionPane.showMessageDialog(null, "Incripcion borrada");
+                JOptionPane.showMessageDialog(null, "Nota actualizada");
             }
             ps.close();
             
