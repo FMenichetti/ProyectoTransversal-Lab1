@@ -23,6 +23,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         escritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jmAlumno = new javax.swing.JMenu();
@@ -34,7 +39,15 @@ public class MenuPrincipal extends javax.swing.JFrame {
         jmiManipNotas = new javax.swing.JMenuItem();
         jmConsultas = new javax.swing.JMenu();
         jmiAlumnosMat = new javax.swing.JMenuItem();
-        jmbSalir = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+
+        jMenu1.setText("File");
+        jMenuBar2.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar2.add(jMenu2);
+
+        jMenuItem1.setText("jMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(62, 67, 76));
@@ -106,13 +119,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jmConsultas);
 
-        jmbSalir.setText("Salir");
-        jmbSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jmbSalirActionPerformed(evt);
+        jMenu3.setText("Salir");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
             }
         });
-        jMenuBar1.add(jmbSalir);
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -185,10 +198,10 @@ public class MenuPrincipal extends javax.swing.JFrame {
         escritorio.moveToFront(am); //Le decimos al escritorio que traiga al frente nuestra ventana
     }//GEN-LAST:event_jmiAlumnosMatActionPerformed
 
-    private void jmbSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmbSalirActionPerformed
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
         // TODO add your handling code here:
-         System.exit(0); // Cerrar la aplicación
-    }//GEN-LAST:event_jmbSalirActionPerformed
+        dispose();
+    }//GEN-LAST:event_jMenu3MouseClicked
 
     /**
      * @param args the command line arguments
@@ -227,12 +240,17 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane escritorio;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JMenu jmAdmin;
     private javax.swing.JMenu jmAlumno;
     private javax.swing.JMenu jmConsultas;
     private javax.swing.JMenu jmMateria;
-    private javax.swing.JMenu jmbSalir;
     private javax.swing.JMenuItem jmiAlumnosMat;
     private javax.swing.JMenuItem jmiFormAlumno;
     private javax.swing.JMenuItem jmiFormMateria;
