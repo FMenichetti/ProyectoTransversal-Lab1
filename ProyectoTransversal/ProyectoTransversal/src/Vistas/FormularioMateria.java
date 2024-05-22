@@ -4,6 +4,10 @@
  */
 package Vistas;
 
+import AccesoDatos.MateriaData;
+import Entidades.Materia;
+import jdk.jfr.internal.consumer.StringParser;
+
 /**
  *
  * @author edulo
@@ -202,6 +206,11 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
         jLabel18.setText("Materia");
 
         btnBuscarCodigo.setText("Buscar");
+        btnBuscarCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCodigoActionPerformed(evt);
+            }
+        });
 
         btnNuevoMateria.setText("Nuevo");
         btnNuevoMateria.addActionListener(new java.awt.event.ActionListener() {
@@ -211,8 +220,18 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
         });
 
         btnEliminarMateria.setText("Eliminar");
+        btnEliminarMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarMateriaActionPerformed(evt);
+            }
+        });
 
         btnGuardarMateria.setText("Guardar");
+        btnGuardarMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarMateriaActionPerformed(evt);
+            }
+        });
 
         btnSalirMateria.setText("Salir");
         btnSalirMateria.addActionListener(new java.awt.event.ActionListener() {
@@ -316,13 +335,49 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoMateriaActionPerformed
-        // TODO add your handling code here:
+        txtCodigo.setText("");
+        txtNombreMateria.setText("");
+        txtAnio.setText("");
+        jrbEstado2.setSelected(false);
     }//GEN-LAST:event_btnNuevoMateriaActionPerformed
 
     private void btnSalirMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirMateriaActionPerformed
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnSalirMateriaActionPerformed
+
+    private void btnBuscarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCodigoActionPerformed
+        String nombre;
+        int anio;
+        boolean estado;
+        int codigo = Integer.parseInt(txtCodigo.getText());
+        MateriaData md = new MateriaData();
+        Materia mat = md.buscarMateria(codigo);
+        txtNombreMateria.setText(""+mat.getNombre());
+        txtAnio.setText(""+mat.getAnio());
+        jrbEstado2.setSelected(mat.isEstado());
+    }//GEN-LAST:event_btnBuscarCodigoActionPerformed
+
+    private void btnEliminarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarMateriaActionPerformed
+        String nombre;
+        int anio;
+        boolean estado;
+        int codigo = Integer.parseInt(txtCodigo.getText());
+        MateriaData md = new MateriaData();
+        Materia mat = md.buscarMateria(codigo);
+        md.eliminarMateria(codigo);
+        mat.setEstado(false);
+    }//GEN-LAST:event_btnEliminarMateriaActionPerformed
+
+    private void btnGuardarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarMateriaActionPerformed
+        String nombre = txtNombreMateria.getText();
+        int anio = Integer.parseInt(txtAnio.getText());
+        boolean estado = jrbEstado2.isSelected();
+        int codigo = Integer.parseInt(txtCodigo.getText());
+        MateriaData md = new MateriaData();
+        Materia mat = new Materia(codigo, nombre, anio, estado);
+        md.guardarMateria(mat);
+    }//GEN-LAST:event_btnGuardarMateriaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
