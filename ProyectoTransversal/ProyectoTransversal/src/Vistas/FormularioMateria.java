@@ -6,6 +6,9 @@ package Vistas;
 
 import AccesoDatos.MateriaData;
 import Entidades.Materia;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 import jdk.jfr.internal.consumer.StringParser;
 
 /**
@@ -14,11 +17,16 @@ import jdk.jfr.internal.consumer.StringParser;
  */
 public class FormularioMateria extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form FormularioMateria
-     */
+    boolean matBuscada = false;
+
     public FormularioMateria() {
         initComponents();
+        btnEliminarMateria.setEnabled(false);
+        txtNombreMateria.setEnabled(false);
+        txtAnio.setEnabled(false);
+        jrbEstado2.setEnabled(false);
+        txtCodigo.setEnabled(true);
+
     }
 
     /**
@@ -335,10 +343,14 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoMateriaActionPerformed
-        txtCodigo.setText("");
-        txtNombreMateria.setText("");
-        txtAnio.setText("");
+        limpiar();
         jrbEstado2.setSelected(false);
+        btnEliminarMateria.setEnabled(false);
+        txtNombreMateria.setEnabled(true);
+        jrbEstado2.setEnabled(true);
+        txtAnio.setEnabled(true);
+        matBuscada = false;
+        txtCodigo.setEnabled(false);
     }//GEN-LAST:event_btnNuevoMateriaActionPerformed
 
     private void btnSalirMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirMateriaActionPerformed
@@ -347,15 +359,39 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirMateriaActionPerformed
 
     private void btnBuscarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCodigoActionPerformed
+        if (!txtCodigo.isEnabled()) {
+            txtCodigo.setEnabled(true);
+            txtNombreMateria.setEnabled(false);
+            jrbEstado2.setEnabled(false);
+            txtAnio.setEnabled(false);
+            limpiar();
+            return;
+        }
+        
         String nombre;
         int anio;
         boolean estado;
-        int codigo = Integer.parseInt(txtCodigo.getText());
+        Integer codigo = null;
+        if (validaReal(txtCodigo.getText())) {
+            codigo = Integer.parseInt(txtCodigo.getText());
+        } else {
+            JOptionPane.showMessageDialog(null, "El codigo debe ser numerico");
+            txtCodigo.setText("");
+            txtCodigo.requestFocus();
+            return;
+        }
         MateriaData md = new MateriaData();
         Materia mat = md.buscarMateria(codigo);
-        txtNombreMateria.setText(""+mat.getNombre());
-        txtAnio.setText(""+mat.getAnio());
+        txtNombreMateria.setText("" + mat.getNombre());
+        txtAnio.setText("" + mat.getAnio());
         jrbEstado2.setSelected(mat.isEstado());
+        btnEliminarMateria.setEnabled(true);
+        txtNombreMateria.setEnabled(true);
+        jrbEstado2.setEnabled(true);
+        txtAnio.setEnabled(true);
+        matBuscada = true;
+        txtCodigo.setEnabled(false);
+        System.out.println(""+ matBuscada);
     }//GEN-LAST:event_btnBuscarCodigoActionPerformed
 
     private void btnEliminarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarMateriaActionPerformed
@@ -370,15 +406,78 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEliminarMateriaActionPerformed
 
     private void btnGuardarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarMateriaActionPerformed
-        String nombre = txtNombreMateria.getText();
-        int anio = Integer.parseInt(txtAnio.getText());
-        boolean estado = jrbEstado2.isSelected();
-        int codigo = Integer.parseInt(txtCodigo.getText());
-        MateriaData md = new MateriaData();
-        Materia mat = new Materia(codigo, nombre, anio, estado);
-        md.guardarMateria(mat);
+        if (matBuscada) {
+            modificarMat();
+        } else {
+            Integer anio = null;
+            Integer codigo = null;
+            boolean estado = false;
+            String nombre = "";
+
+            if (validaReal(txtAnio.getText())) {
+                anio = Integer.parseInt(txtAnio.getText());
+                estado = jrbEstado2.isSelected();
+                nombre = txtNombreMateria.getText();
+            } else {
+                JOptionPane.showMessageDialog(null, "El anio debe ser numerico");
+                txtAnio.setText("");
+                txtAnio.requestFocus();
+                return;
+            }
+
+            MateriaData md = new MateriaData();
+            Materia mat = new Materia(nombre, anio, estado);
+            md.guardarMateria(mat);
+            limpiar();
+        }
+        matBuscada = false;
     }//GEN-LAST:event_btnGuardarMateriaActionPerformed
 
+    // ------------------ METODO PARA VALIDAR REAL ------------------
+    private boolean validaReal(String nro) {
+        Pattern patron = Pattern.compile("^\\d+(\\.\\d+)?$");
+        Matcher m = patron.matcher(nro);
+        return m.matches();
+
+    }
+
+    public void modificarMat() {
+        Integer anio = null;
+        Integer codigo = null;
+        boolean estado = false;
+        String nombre = "";
+        if (validaReal(txtCodigo.getText())) {
+            codigo = Integer.parseInt(txtCodigo.getText());
+            nombre = txtNombreMateria.getText();
+            if (validaReal(txtAnio.getText())) {
+                anio = Integer.parseInt(txtAnio.getText());
+                estado = jrbEstado2.isSelected();
+            } else {
+                JOptionPane.showMessageDialog(null, "El anio debe ser numerico");
+                txtAnio.setText("");
+                txtAnio.requestFocus();
+                return;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "El codigo debe ser numerico");
+            txtCodigo.setText("");
+            txtCodigo.requestFocus();
+            return;
+        }
+
+        MateriaData md = new MateriaData();
+        Materia mat = new Materia(codigo, nombre, anio, estado);
+        md.modificarMateria(mat);
+        limpiar();
+
+    }
+
+    public void limpiar() {
+        txtCodigo.setText("");
+        txtNombreMateria.setText("");
+        txtAnio.setText("");
+        jrbEstado2.setSelected(false);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar1;
