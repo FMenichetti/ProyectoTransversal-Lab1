@@ -84,11 +84,11 @@ public class Main {
 //        }
 
          
-//        for (Materia oba3 : iData1.obtenerMateriasCursadas(1)) {
+//        for (Materia oba3 : iData1.obtenerMateriasCursadas(5)) {
 //             System.out.println(oba3);
 //        }
-
-//          for (Materia oba4 : iData1.obtenerMateriasNOCursadas(1)) {
+//        System.out.println("///////////");
+//          for (Materia oba4 : iData1.obtenerMateriasNOCursadas(5)) {
 //             System.out.println(oba4);
 //        }
 
@@ -106,9 +106,9 @@ public class Main {
 //            }
 //        }
         
-          for (Alumno oba7 : iData1.obtenerAlumnosXMaterias(1)) {
-              System.out.println(oba7);
-            }
+//          for (Alumno oba7 : iData1.obtenerAlumnosXMaterias(1)) {
+//              System.out.println(oba7);
+//            }
         }
         
     
