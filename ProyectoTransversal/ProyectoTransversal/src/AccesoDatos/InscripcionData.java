@@ -144,7 +144,7 @@ public class InscripcionData {
 
     public List<Alumno> obtenerAlumnosXMaterias(int idMateria) {
         List<Alumno> alumnosLista = new ArrayList<Alumno>();
-        String sql = "SELECT a.idAlumno, nombre, apellido, fechaNacimiento, estado "
+        String sql = "SELECT a.idAlumno, dni, nombre, apellido, fechaNacimiento, estado "
                 + "FROM inscripcion i, alumno a WHERE i.idAlumno = a.idAlumno "
                 + "AND i.idMateria = ? AND a.estado = 1;";
         try {
@@ -155,6 +155,7 @@ public class InscripcionData {
                 Alumno alumno = new Alumno();
 
                 alumno.setIdAlumno(rs.getInt("idAlumno"));
+                alumno.setDni(rs.getInt("dni"));
                 alumno.setApellido(rs.getString("apellido"));
                 alumno.setNombre(rs.getString("nombre"));
                 alumno.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());

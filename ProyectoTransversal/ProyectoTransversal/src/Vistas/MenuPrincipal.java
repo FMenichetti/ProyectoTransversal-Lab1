@@ -1,5 +1,6 @@
-
 package Vistas;
+
+import AccesoDatos.MateriaData;
 
 /**
  *
@@ -145,7 +146,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jmiFormAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiFormAlumnoActionPerformed
         // TODO add your handling code here:
-        
+
         escritorio.removeAll(); //Removemos todo lo que tenga nuestro escritorio
         escritorio.repaint(); //Volvemos a repintar el escritorio
         FormularioAlumno fa = new FormularioAlumno(); //Instancia de la ventana formulario alumno
@@ -156,7 +157,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jmiFormMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiFormMateriaActionPerformed
         // TODO add your handling code here:
-        
+
         escritorio.removeAll(); //Removemos todo lo que tenga nuestro escritorio
         escritorio.repaint(); //Volvemos a repintar el escritorio
         FormularioMateria fm = new FormularioMateria(); //Instancia de la ventana formulario materia
@@ -167,7 +168,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jmiManejoInscripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiManejoInscripActionPerformed
         // TODO add your handling code here:
-        
+
         escritorio.removeAll(); //Removemos todo lo que tenga nuestro escritorio
         escritorio.repaint(); //Volvemos a repintar el escritorio
         ManejoInscripciones mi = new ManejoInscripciones(); //Instancia de la ventana ManejoInscripciones
@@ -179,9 +180,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jmiManipNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiManipNotasActionPerformed
         // TODO add your handling code here:
         
+        FormularioCargaNotas fcn = new FormularioCargaNotas(); //Instancia de la ventana FormularioCargaNotas
+        
+        // Llamamos al metodo para cargar los alumnos en el combo box
+        fcn.listarAlumnosEnComboBox();
+
         escritorio.removeAll(); //Removemos todo lo que tenga nuestro escritorio
         escritorio.repaint(); //Volvemos a repintar el escritorio
-        FormularioCargaNotas fcn = new FormularioCargaNotas(); //Instancia de la ventana FormularioCargaNotas
+        
         fcn.setVisible(true); //La hacemos visible
         escritorio.add(fcn); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(fcn); //Le decimos al escritorio que traiga al frente nuestra ventana
@@ -189,10 +195,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jmiAlumnosMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAlumnosMatActionPerformed
         // TODO add your handling code here:
-        
+
+        AlumnosMateria am = new AlumnosMateria(); //Instancia de la ventana Alumnos Materia
+
+        // Llamamos al metodo para cargar las materias en el combo box
+        am.listarMateriasEnComboBox();
+
         escritorio.removeAll(); //Removemos todo lo que tenga nuestro escritorio
         escritorio.repaint(); //Volvemos a repintar el escritorio
-        AlumnosMateria am = new AlumnosMateria(); //Instancia de la ventana Alumnos Materia
         am.setVisible(true); //La hacemos visible
         escritorio.add(am); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(am); //Le decimos al escritorio que traiga al frente nuestra ventana

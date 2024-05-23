@@ -1,20 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package Vistas;
 
-/**
- *
- * @author edulo
- */
+import AccesoDatos.InscripcionData;
+import AccesoDatos.MateriaData;
+import Entidades.Alumno;
+import Entidades.Materia;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 public class AlumnosMateria extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form AlumnosMateria
-     */
     public AlumnosMateria() {
         initComponents();
+    }
+
+    public void listarMateriasEnComboBox() {
+        MateriaData md = new MateriaData();
+        List<Materia> materias = md.listarMateria();
+
+        // Limpiar el combo box antes de agregar las materias
+        jComboAlumnoMateria.removeAllItems();
+
+        // Agregar cada materia al combo box
+        for (Materia materia : materias) {
+            jComboAlumnoMateria.addItem(materia.getNombre());
+        }
     }
 
     /**
@@ -34,9 +43,14 @@ public class AlumnosMateria extends javax.swing.JInternalFrame {
         jLabel18 = new javax.swing.JLabel();
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel13.setText("Seleccione un alumno:");
+        jLabel13.setText("Seleccione una Materia:");
 
         jComboAlumnoMateria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboAlumnoMateria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboAlumnoMateriaActionPerformed(evt);
+            }
+        });
 
         jTablaAlumnoMateria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -112,6 +126,53 @@ public class AlumnosMateria extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnSalirAlumnoMateriaActionPerformed
+
+    private void jComboAlumnoMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboAlumnoMateriaActionPerformed
+        // Obtenemos el nombre de la materia seleccionada en el combo box
+        String nombreMateria = (String) jComboAlumnoMateria.getSelectedItem();
+
+        //Creamos una instancia de MateriaData
+        MateriaData materiaData = new MateriaData();
+
+        //Guardamos el id de la materia en una variable
+        int idMatSelec = -1; // inicializamos en -1
+
+        //Recorremos y buscamos la materia seleccionada en la lista
+        for (Materia materia : materiaData.listarMateria()) {
+            if (materia.getNombre().equals(nombreMateria)) {
+                //Si se encontro la materia seleccionada, obtenemos su id
+                idMatSelec = materia.getIdMateria();
+                break; //salimos del bucle cuando se encuentra la materia
+            }
+        }
+
+        //Verificamos si se encontro la materia seleccionada
+        if (idMatSelec != -1) {
+            //Creamos una instancia de InscripcionData
+            InscripcionData iData = new InscripcionData();
+
+            // Obtenemos la lista de alumnos inscritos en la materia seleccionada
+            List<Alumno> alumnos = iData.obtenerAlumnosXMaterias(idMatSelec);
+
+            //Obtenemos el modelo de la tabla
+            DefaultTableModel modeloTabla = (DefaultTableModel) jTablaAlumnoMateria.getModel();
+
+            //Limpiamos el contenido de la tabla
+            modeloTabla.setRowCount(0);
+
+            //Ahora vamos a recorrer la lista de alumnos y lo agregaremosa la tabla
+            for (Alumno alumno : alumnos) {
+                //Creams un array con los datos del alumno
+                Object[] rowData = {alumno.getIdAlumno(), alumno.getDni(), alumno.getApellido(), alumno.getNombre()};
+
+                //Agregamos la fila a la tabla
+                modeloTabla.addRow(rowData);
+            }
+
+        }
+
+
+    }//GEN-LAST:event_jComboAlumnoMateriaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

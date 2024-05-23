@@ -1,20 +1,33 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JInternalFrame.java to edit this template
- */
 package Vistas;
 
-/**
- *
- * @author edulo
- */
+import AccesoDatos.AlumnoData;
+import AccesoDatos.InscripcionData;
+import AccesoDatos.MateriaData;
+import Entidades.Alumno;
+import Entidades.Inscripcion;
+import Entidades.Materia;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 public class FormularioCargaNotas extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form FormularioCargaNotas
-     */
     public FormularioCargaNotas() {
         initComponents();
+    }
+
+    public void listarAlumnosEnComboBox() {
+        AlumnoData ad = new AlumnoData();
+        List<Alumno> alumnos = ad.listarAlumno();
+
+        // Limpiar el combo box antes de agregar los alumnos
+        jComboNotas.removeAllItems();
+
+        // Agregar cada alumno al combo box
+        for (Alumno alumno : alumnos) {
+            String nombreCompleto = alumno.getApellido() + ", " + alumno.getNombre();
+            jComboNotas.addItem(nombreCompleto);
+        }
     }
 
     /**
@@ -41,6 +54,11 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
         jLabel13.setText("Seleccione un alumno:");
 
         jComboNotas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboNotas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboNotasActionPerformed(evt);
+            }
+        });
 
         jTablaNotas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -78,18 +96,17 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(30, 30, 30)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(174, 174, 174)
-                            .addComponent(jLabel18))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(19, 19, 19)
-                            .addComponent(jLabel13)
-                            .addGap(47, 47, 47)
-                            .addComponent(jComboNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(174, 174, 174)
+                        .addComponent(jLabel18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jComboNotas, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(200, 200, 200)
                         .addComponent(btnGuardarNota)
@@ -120,9 +137,80 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
 
     private void btnSalirNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirNotasActionPerformed
         // TODO add your handling code here:
-        
+
         dispose();
     }//GEN-LAST:event_btnSalirNotasActionPerformed
+
+    private void jComboNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboNotasActionPerformed
+        // TODO add your handling code here:
+
+    // Obtenemos el nombre del alumno seleccionado en el combo box
+    String nombreCompletoAlumno = (String) jComboNotas.getSelectedItem();
+
+    //Creamos una instancia de AlumnoData
+    AlumnoData alumnoData = new AlumnoData();
+
+    //Guardamos el id del alumno en una variable
+    int idAluSelec = -1; // inicializamos en -1
+
+    //Recorremos y buscamos el alumno seleccionado en la lista
+    for (Alumno alumno : alumnoData.listarAlumno()) {
+        String nombreCompleto = alumno.getApellido() + ", " + alumno.getNombre();
+        if (nombreCompleto.equals(nombreCompletoAlumno)) {
+            //Si se encontro al alumno seleccionado, obtenemos su id
+            idAluSelec = alumno.getIdAlumno();
+            break; //salimos del bucle cuando se encuentra el alumno
+        }
+    }
+
+    //Verificamos si se encontro el alumno seleccionado
+    if (idAluSelec != -1) {
+
+        //Creamos una instancia de InscripcionData
+        InscripcionData iData = new InscripcionData();
+
+        // Obtenemos la lista de materias a las que el alumno seleccionado se inscribio
+        List<Inscripcion> inscripciones = iData.obtenerInscripcionesPorAlumno(idAluSelec);
+
+        // Crear una lista para almacenar las materias
+        List<Materia> materias = new ArrayList<>();
+
+        // Creamos una instancia de MateriaData para obtener detalles de las materias
+        MateriaData materiaData = new MateriaData();
+
+        // Recorremos las inscripciones y obtenemos las materias correspondientes
+        for (Inscripcion inscripcion : inscripciones) {
+            Materia materia = materiaData.buscarMateria(inscripcion.getIdMateria());
+            if (materia != null) {
+                materias.add(materia);
+            }
+        }
+
+        // Obtenemos el modelo de la tabla
+        DefaultTableModel modeloTabla = (DefaultTableModel) jTablaNotas.getModel();
+
+        // Limpiamos el contenido de la tabla
+        modeloTabla.setRowCount(0);
+
+        // Ahora vamos a recorrer la lista de materias y las agregaremos a la tabla
+        for (Materia materia : materias) {
+            // Creamos un array con los datos de la materia
+            Object[] rowData = {materia.getIdMateria(), materia.getNombre(), materia.getAnio()};
+
+            // Agregamos la fila a la tabla
+            modeloTabla.addRow(rowData);
+        }
+    } else {
+        // Manejo del caso cuando no se encuentra el alumno
+        System.out.println("Alumno no encontrado");
+    }
+
+
+    
+        
+
+
+    }//GEN-LAST:event_jComboNotasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

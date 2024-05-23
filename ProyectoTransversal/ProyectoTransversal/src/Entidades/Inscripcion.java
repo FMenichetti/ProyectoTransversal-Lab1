@@ -22,7 +22,9 @@ public class Inscripcion {
 
     public Inscripcion() {
     }
-
+    
+    
+    
     public int getIdInscripcion() {
         return idInscripcion;
     }
