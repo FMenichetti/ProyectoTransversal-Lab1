@@ -1,9 +1,15 @@
-
 package Vistas;
 
-
+import AccesoDatos.AlumnoData;
+import Entidades.Alumno;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import javax.swing.JOptionPane;
 
 public class FormularioAlumno extends javax.swing.JInternalFrame {
+
+    private int bandera = 0;
 
     /**
      * Creates new form FormularioAlumno
@@ -39,12 +45,32 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
 
         btnBuscarAlumno.setText("Buscar");
+        btnBuscarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarAlumnoActionPerformed(evt);
+            }
+        });
 
         btnNuevoAlumno.setText("Nuevo");
+        btnNuevoAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoAlumnoActionPerformed(evt);
+            }
+        });
 
         btnEliminarAlumno.setText("Eliminar");
+        btnEliminarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarAlumnoActionPerformed(evt);
+            }
+        });
 
         btnGuardarAlumno.setText("Guardar");
+        btnGuardarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarAlumnoActionPerformed(evt);
+            }
+        });
 
         btnSalirAlumno.setText("Salir");
         btnSalirAlumno.addActionListener(new java.awt.event.ActionListener() {
@@ -163,6 +189,94 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_btnSalirAlumnoActionPerformed
+
+    private void btnBuscarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarAlumnoActionPerformed
+        // TODO add your handling code here:
+        AlumnoData acceso = new AlumnoData();
+        Alumno alumno = null;
+        @SuppressWarnings("UnusedAssignment")
+        Integer dni = null;
+        Date nacimiento = new Date(0);
+
+        try {
+            dni = Integer.valueOf(txtDni.getText());
+        } catch (NumberFormatException n) {
+
+            JOptionPane.showMessageDialog(rootPane, "porfavor inserte solo numeros en el campo dni");
+            return;
+        }
+
+        alumno = acceso.buscarAlumnoPorDni(dni);
+        nacimiento = Date.valueOf(alumno.getFechaNacimiento());
+        jrbEstado.setSelected(alumno.isEstado());
+        jdNacimiento.setDate(nacimiento);
+        txtApellido.setText(alumno.getApellido());
+        txtNombre.setText(alumno.getNombre());
+        bandera = 1;
+
+    }//GEN-LAST:event_btnBuscarAlumnoActionPerformed
+
+    private void btnNuevoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoAlumnoActionPerformed
+        // TODO add your handling code here:
+        txtDni.setText("");
+        jrbEstado.setSelected(false);
+        jdNacimiento.setDate(Date.valueOf(LocalDate.now()));
+        txtApellido.setText("");
+        txtNombre.setText("");
+        bandera = 0;
+
+    }//GEN-LAST:event_btnNuevoAlumnoActionPerformed
+
+    private void btnEliminarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarAlumnoActionPerformed
+        // TODO add your handling code here:
+
+        if (bandera == 1) {
+            AlumnoData acceso = new AlumnoData();
+            Alumno alumno = null;
+
+            alumno = acceso.buscarAlumnoPorDni(Integer.valueOf(txtDni.getText()));
+            acceso.eliminarAlumno(alumno.getIdAlumno());
+            bandera = 0;
+            //limpieza de campos
+            btnNuevoAlumnoActionPerformed(evt);
+
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "porfavor busque un alumno antes de eliminar");
+
+        }
+
+    }//GEN-LAST:event_btnEliminarAlumnoActionPerformed
+
+    private void btnGuardarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAlumnoActionPerformed
+        // TODO add your handling code here:
+
+        AlumnoData acceso = new AlumnoData();
+        Alumno alumno = new Alumno();
+
+        if (txtApellido.toString().length() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un apellido");
+        } else if (txtNombre.toString().length() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un nombre");
+        } else if (txtDni.toString().length() == 0) {
+
+            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un DNI");
+        } else {
+            int dni = Integer.parseInt(txtDni.getText());
+
+            alumno.setApellido(txtApellido.getText());
+            alumno.setNombre(txtNombre.getText());
+
+            alumno.setDni(dni);
+            alumno.setEstado(jrbEstado.isSelected());
+
+            //TODO MAL CON EL JDCALENDAR 
+            alumno.setFechaNacimiento(jdNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+            acceso.guardarAlumno(alumno);
+
+        }
+
+    }//GEN-LAST:event_btnGuardarAlumnoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
