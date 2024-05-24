@@ -1,7 +1,14 @@
-
 package Vistas;
 
-
+import AccesoDatos.AlumnoData;
+import Entidades.Alumno;
+import com.toedter.calendar.JTextFieldDateEditor;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import javax.swing.JOptionPane;
+import java.util.regex.*;
 
 public class FormularioAlumno extends javax.swing.JInternalFrame {
 
@@ -10,6 +17,10 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
      */
     public FormularioAlumno() {
         initComponents();
+        btnEliminarAlumno.setEnabled(false);
+        editorJcalendar = (JTextFieldDateEditor) jdNacimiento.getDateEditor();
+        editorJcalendar.setEditable(false);
+        jdNacimiento.setDate(Date.valueOf((LocalDate.of(2006, Month.JANUARY, 01))));
     }
 
     /**
@@ -39,12 +50,32 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
 
         btnBuscarAlumno.setText("Buscar");
+        btnBuscarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarAlumnoActionPerformed(evt);
+            }
+        });
 
         btnNuevoAlumno.setText("Nuevo");
+        btnNuevoAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoAlumnoActionPerformed(evt);
+            }
+        });
 
         btnEliminarAlumno.setText("Eliminar");
+        btnEliminarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarAlumnoActionPerformed(evt);
+            }
+        });
 
         btnGuardarAlumno.setText("Guardar");
+        btnGuardarAlumno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarAlumnoActionPerformed(evt);
+            }
+        });
 
         btnSalirAlumno.setText("Salir");
         btnSalirAlumno.addActionListener(new java.awt.event.ActionListener() {
@@ -67,6 +98,8 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Fecha de Nacimiento:");
+
+        jdNacimiento.setMaxSelectableDate(new java.util.Date(1167624084000L));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel6.setText("Alumno");
@@ -164,6 +197,115 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         dispose();
     }//GEN-LAST:event_btnSalirAlumnoActionPerformed
 
+    private void btnBuscarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarAlumnoActionPerformed
+        // TODO add your handling code here:
+        AlumnoData acceso = new AlumnoData();
+        Alumno alumno = null;
+        Integer dni = null;
+        Date nacimiento = new Date(0);
+
+        if (patronDni(txtDni.getText())) {
+            JOptionPane.showMessageDialog(rootPane, "porfavor inserte un dni valido(solo numeros max8)");
+            txtDni.requestFocus();
+            return;
+        } else {
+
+            if (txtDni.getText().toString().length() != 0) {
+                alumno = acceso.buscarAlumnoPorDni(dni = Integer.valueOf(txtDni.getText()));
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "por favor rellene el campo dni");
+                return;
+            }
+
+            if (alumno != null) {
+                nacimiento = Date.valueOf(alumno.getFechaNacimiento());
+                jrbEstado.setSelected(alumno.isEstado());
+                jdNacimiento.setDate(nacimiento);
+                txtApellido.setText(alumno.getApellido());
+                txtNombre.setText(alumno.getNombre());
+                btnEliminarAlumno.setEnabled(true);
+            }
+
+        }
+
+
+    }//GEN-LAST:event_btnBuscarAlumnoActionPerformed
+
+    private void btnNuevoAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoAlumnoActionPerformed
+        // TODO add your handling code here:
+        txtDni.setText("");
+        jrbEstado.setSelected(false);
+        jdNacimiento.setDate(Date.valueOf((LocalDate.of(2006, Month.JANUARY, 01))));
+        txtApellido.setText("");
+        txtNombre.setText("");
+        btnEliminarAlumno.setEnabled(false);
+
+    }//GEN-LAST:event_btnNuevoAlumnoActionPerformed
+
+    private void btnEliminarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarAlumnoActionPerformed
+        // TODO add your handling code here:
+
+        AlumnoData acceso = new AlumnoData();
+        Alumno alumno = null;
+
+        alumno = acceso.buscarAlumnoPorDni(Integer.valueOf(txtDni.getText()));
+        acceso.eliminarAlumno(alumno.getIdAlumno());
+
+        //limpieza de campos y desabilitacion del boton
+        btnNuevoAlumnoActionPerformed(evt);
+
+
+    }//GEN-LAST:event_btnEliminarAlumnoActionPerformed
+
+    private void btnGuardarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAlumnoActionPerformed
+        // TODO add your handling code here:
+
+        AlumnoData acceso = new AlumnoData();
+        Alumno alumno = new Alumno();
+
+        if (txtApellido.getText().length() <= 0) {
+            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un apellido");
+            txtApellido.requestFocus();
+        } else if (txtNombre.getText().length() <= 0) {
+            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un nombre");
+            txtNombre.requestFocus();
+        } else if (txtDni.getText().length() <= 0) {
+
+            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un DNI");
+            txtDni.requestFocus();
+        } else {
+            if (patronDni(txtDni.getText())) {
+                JOptionPane.showMessageDialog(rootPane, "porfavor inserte un dni valido(solo numeros max8)");
+                return;
+            }
+            int dni = Integer.parseInt(txtDni.getText());
+
+            alumno.setApellido(txtApellido.getText());
+            alumno.setNombre(txtNombre.getText());
+
+            alumno.setDni(dni);
+            alumno.setEstado(jrbEstado.isSelected());
+
+            //TODO MAL CON EL JDCALENDAR 
+            alumno.setFechaNacimiento(jdNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+            acceso.guardarAlumno(alumno);
+
+        }
+
+
+    }//GEN-LAST:event_btnGuardarAlumnoActionPerformed
+
+    private boolean patronDni(String dni) {
+        //TRUE si el dni contiene cualquier cosa que no sea un numero
+        Pattern patron = Pattern.compile("\\D+|.{9,}");
+        Matcher comparador = patron.matcher(dni);
+
+        return comparador.find();
+    }
+
+    //editor de texto del jdatechooser
+    JTextFieldDateEditor editorJcalendar;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarAlumno;
