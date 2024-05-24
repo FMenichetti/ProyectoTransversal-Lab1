@@ -2,11 +2,9 @@ package Vistas;
 
 import AccesoDatos.AlumnoData;
 import AccesoDatos.InscripcionData;
-import AccesoDatos.MateriaData;
 import Entidades.Alumno;
 import Entidades.Inscripcion;
 import Entidades.Materia;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -23,7 +21,7 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
         alumnoData = new AlumnoData();
         inscripcionData = new InscripcionData();
     }
-
+    
     public void listarAlumnosEnComboBox() {
         AlumnoData ad = new AlumnoData();
         List<Alumno> alumnos = ad.listarAlumno();
@@ -192,9 +190,6 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
                 // Agregamos la fila a la tabla
                 modeloTabla.addRow(rowData);
             }
-        }else {
-            // Manejo del caso cuando no se encuentra el alumno
-            System.out.println("Alumno no encontrado");
         }
 
 
@@ -214,7 +209,11 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
         if (idAluSelec != -1) {
             int idMateria = (Integer) modeloTabla.getValueAt(filaSeleccionada, 0);
             double nuevaNota = Double.parseDouble(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
-            inscripcionData.actualizarNota(idAluSelec, idMateria, nuevaNota);
+            
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea actualizar la nota?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                inscripcionData.actualizarNota(idAluSelec, idMateria, nuevaNota);
+            }
         }
     }
     }//GEN-LAST:event_btnGuardarNotaActionPerformed
