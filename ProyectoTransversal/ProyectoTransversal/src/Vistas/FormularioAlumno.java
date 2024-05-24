@@ -2,8 +2,10 @@ package Vistas;
 
 import AccesoDatos.AlumnoData;
 import Entidades.Alumno;
+import com.toedter.calendar.JTextFieldDateEditor;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import javax.swing.JOptionPane;
 import java.util.regex.*;
@@ -16,6 +18,9 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
     public FormularioAlumno() {
         initComponents();
         btnEliminarAlumno.setEnabled(false);
+        editorJcalendar = (JTextFieldDateEditor) jdNacimiento.getDateEditor();
+        editorJcalendar.setEditable(false);
+        jdNacimiento.setDate(Date.valueOf((LocalDate.of(2006, Month.JANUARY, 01))));
     }
 
     /**
@@ -93,6 +98,8 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Fecha de Nacimiento:");
+
+        jdNacimiento.setMaxSelectableDate(new java.util.Date(1167624084000L));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel6.setText("Alumno");
@@ -198,18 +205,26 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         Date nacimiento = new Date(0);
 
         if (patronDni(txtDni.getText())) {
-             JOptionPane.showMessageDialog(rootPane, "porfavor inserte un dni valido(solo numeros max8)");
+            JOptionPane.showMessageDialog(rootPane, "porfavor inserte un dni valido(solo numeros max8)");
             txtDni.requestFocus();
             return;
         } else {
 
-            alumno = acceso.buscarAlumnoPorDni(dni = Integer.valueOf(txtDni.getText()));
-            nacimiento = Date.valueOf(alumno.getFechaNacimiento());
-            jrbEstado.setSelected(alumno.isEstado());
-            jdNacimiento.setDate(nacimiento);
-            txtApellido.setText(alumno.getApellido());
-            txtNombre.setText(alumno.getNombre());
-            btnEliminarAlumno.setEnabled(true);
+            if (txtDni.getText().toString().length() != 0) {
+                alumno = acceso.buscarAlumnoPorDni(dni = Integer.valueOf(txtDni.getText()));
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "por favor rellene el campo dni");
+                return;
+            }
+
+            if (alumno != null) {
+                nacimiento = Date.valueOf(alumno.getFechaNacimiento());
+                jrbEstado.setSelected(alumno.isEstado());
+                jdNacimiento.setDate(nacimiento);
+                txtApellido.setText(alumno.getApellido());
+                txtNombre.setText(alumno.getNombre());
+                btnEliminarAlumno.setEnabled(true);
+            }
 
         }
 
@@ -220,7 +235,7 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         txtDni.setText("");
         jrbEstado.setSelected(false);
-        jdNacimiento.setDate(Date.valueOf(LocalDate.now()));
+        jdNacimiento.setDate(Date.valueOf((LocalDate.of(2006, Month.JANUARY, 01))));
         txtApellido.setText("");
         txtNombre.setText("");
         btnEliminarAlumno.setEnabled(false);
@@ -289,6 +304,8 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         return comparador.find();
     }
 
+    //editor de texto del jdatechooser
+    JTextFieldDateEditor editorJcalendar;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarAlumno;
