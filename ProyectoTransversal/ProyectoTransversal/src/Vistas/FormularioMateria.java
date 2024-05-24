@@ -359,6 +359,7 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirMateriaActionPerformed
 
     private void btnBuscarCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCodigoActionPerformed
+        Materia mat = null;
         if (!txtCodigo.isEnabled()) {
             txtCodigo.setEnabled(true);
             txtNombreMateria.setEnabled(false);
@@ -373,23 +374,27 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
         boolean estado;
         Integer codigo = null;
         if (validaReal(txtCodigo.getText())) {
-            codigo = Integer.parseInt(txtCodigo.getText());
+            codigo = Integer.parseInt(txtCodigo.getText()); 
         } else {
-            JOptionPane.showMessageDialog(null, "El codigo debe ser numerico");
+            JOptionPane.showMessageDialog(null, "El codigo debe ser numerico de maximo 9 digitos");
             txtCodigo.setText("");
             txtCodigo.requestFocus();
             return;
         }
         MateriaData md = new MateriaData();
-        Materia mat = md.buscarMateria(codigo);
+        mat = md.buscarMateria(codigo);
+        if (mat != null) {
+            matBuscada = true;
+        }else{
+            return;
+        }
         txtNombreMateria.setText("" + mat.getNombre());
         txtAnio.setText("" + mat.getAnio());
         jrbEstado2.setSelected(mat.isEstado());
         btnEliminarMateria.setEnabled(true);
         txtNombreMateria.setEnabled(true);
         jrbEstado2.setEnabled(true);
-        txtAnio.setEnabled(true);
-        matBuscada = true;
+        txtAnio.setEnabled(true);    
         txtCodigo.setEnabled(false);
         System.out.println(""+ matBuscada);
     }//GEN-LAST:event_btnBuscarCodigoActionPerformed
@@ -414,12 +419,12 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
             boolean estado = false;
             String nombre = "";
 
-            if (validaReal(txtAnio.getText())) {
+            if (validaReal(txtAnio.getText()) && !txtNombre1.getText().isEmpty()) {
                 anio = Integer.parseInt(txtAnio.getText());
                 estado = jrbEstado2.isSelected();
                 nombre = txtNombreMateria.getText();
             } else {
-                JOptionPane.showMessageDialog(null, "El anio debe ser numerico");
+                JOptionPane.showMessageDialog(null, "Rellene todos los campos y recuerde que el año debe ser numerico");
                 txtAnio.setText("");
                 txtAnio.requestFocus();
                 return;
