@@ -8,12 +8,20 @@ import Entidades.Inscripcion;
 import Entidades.Materia;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class FormularioCargaNotas extends javax.swing.JInternalFrame {
 
+    DefaultTableModel modeloTabla;
+    AlumnoData alumnoData;
+    InscripcionData inscripcionData;
+
     public FormularioCargaNotas() {
         initComponents();
+        modeloTabla = new DefaultTableModel();
+        alumnoData = new AlumnoData();
+        inscripcionData = new InscripcionData();
     }
 
     public void listarAlumnosEnComboBox() {
@@ -82,6 +90,11 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTablaNotas);
 
         btnGuardarNota.setText("Guardar");
+        btnGuardarNota.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarNotaActionPerformed(evt);
+            }
+        });
 
         btnSalirNotas.setText("Salir");
         btnSalirNotas.addActionListener(new java.awt.event.ActionListener() {
@@ -142,75 +155,69 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirNotasActionPerformed
 
     private void jComboNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboNotasActionPerformed
-        // TODO add your handling code here:
 
-    // Obtenemos el nombre del alumno seleccionado en el combo box
-    String nombreCompletoAlumno = (String) jComboNotas.getSelectedItem();
+        // Obtenemos el nombre del alumno seleccionado en el combo box
+        String nombreCompletoAlumno = (String) jComboNotas.getSelectedItem();
 
-    //Creamos una instancia de AlumnoData
-    AlumnoData alumnoData = new AlumnoData();
+        //Guardamos el id del alumno en una variable
+        int idAluSelec = -1; // inicializamos en -1
 
-    //Guardamos el id del alumno en una variable
-    int idAluSelec = -1; // inicializamos en -1
-
-    //Recorremos y buscamos el alumno seleccionado en la lista
-    for (Alumno alumno : alumnoData.listarAlumno()) {
-        String nombreCompleto = alumno.getApellido() + ", " + alumno.getNombre();
-        if (nombreCompleto.equals(nombreCompletoAlumno)) {
-            //Si se encontro al alumno seleccionado, obtenemos su id
-            idAluSelec = alumno.getIdAlumno();
-            break; //salimos del bucle cuando se encuentra el alumno
-        }
-    }
-
-    //Verificamos si se encontro el alumno seleccionado
-    if (idAluSelec != -1) {
-
-        //Creamos una instancia de InscripcionData
-        InscripcionData iData = new InscripcionData();
-
-        // Obtenemos la lista de materias a las que el alumno seleccionado se inscribio
-        List<Inscripcion> inscripciones = iData.obtenerInscripcionesPorAlumno(idAluSelec);
-
-        // Crear una lista para almacenar las materias
-        List<Materia> materias = new ArrayList<>();
-
-        // Creamos una instancia de MateriaData para obtener detalles de las materias
-        MateriaData materiaData = new MateriaData();
-
-        // Recorremos las inscripciones y obtenemos las materias correspondientes
-        for (Inscripcion inscripcion : inscripciones) {
-            Materia materia = materiaData.buscarMateria(inscripcion.getIdMateria());
-            if (materia != null) {
-                materias.add(materia);
+        //Recorremos y buscamos el alumno seleccionado en la lista
+        for (Alumno alumno : alumnoData.listarAlumno()) {
+            String nombreCompleto = alumno.getApellido() + ", " + alumno.getNombre();
+            if (nombreCompleto.equals(nombreCompletoAlumno)) {
+                //Si se encontro al alumno seleccionado, obtenemos su id
+                idAluSelec = alumno.getIdAlumno();
+                break; //salimos del bucle cuando se encuentra el alumno
             }
         }
 
-        // Obtenemos el modelo de la tabla
-        DefaultTableModel modeloTabla = (DefaultTableModel) jTablaNotas.getModel();
+        //Verificamos si se encontro el alumno seleccionado
+        if (idAluSelec != -1) {
 
-        // Limpiamos el contenido de la tabla
-        modeloTabla.setRowCount(0);
+            // Obtenemos la lista de materias a las que el alumno seleccionado se inscribio
+            List<Inscripcion> inscripciones = inscripcionData.obtenerInscripcionesPorAlumno(idAluSelec);
+            
+            //Obtenemos el modelo de la tabla
+            modeloTabla = (DefaultTableModel) jTablaNotas.getModel();
+            // Limpiamos el contenido de la tabla
+            modeloTabla.setRowCount(0);
+            
+            // Aca es donde vamos a recorrer la lista de materias y las agregaremos a la tabla
+            for (Inscripcion inscripcion : inscripciones) {
+                Materia materia = inscripcion.getMateria();
+                // Creamos un array con los datos de la materia
+                Object[] rowData = {materia.getIdMateria(), materia.getNombre(), inscripcion.getNota()};
 
-        // Ahora vamos a recorrer la lista de materias y las agregaremos a la tabla
-        for (Materia materia : materias) {
-            // Creamos un array con los datos de la materia
-            Object[] rowData = {materia.getIdMateria(), materia.getNombre(), materia.getAnio()};
-
-            // Agregamos la fila a la tabla
-            modeloTabla.addRow(rowData);
+                // Agregamos la fila a la tabla
+                modeloTabla.addRow(rowData);
+            }
+        }else {
+            // Manejo del caso cuando no se encuentra el alumno
+            System.out.println("Alumno no encontrado");
         }
-    } else {
-        // Manejo del caso cuando no se encuentra el alumno
-        System.out.println("Alumno no encontrado");
-    }
-
-
-    
-        
 
 
     }//GEN-LAST:event_jComboNotasActionPerformed
+
+    private void btnGuardarNotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarNotaActionPerformed
+        int filaSeleccionada = jTablaNotas.getSelectedRow();
+    if (filaSeleccionada != -1) {
+        String nombreCompletoAlumno = (String) jComboNotas.getSelectedItem();
+        int idAluSelec = -1;
+        for (Alumno alumno : alumnoData.listarAlumno()) {
+            if ((alumno.getApellido() + ", " + alumno.getNombre()).equals(nombreCompletoAlumno)) {
+                idAluSelec = alumno.getIdAlumno();
+                break;
+            }
+        }
+        if (idAluSelec != -1) {
+            int idMateria = (Integer) modeloTabla.getValueAt(filaSeleccionada, 0);
+            double nuevaNota = Double.parseDouble(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
+            inscripcionData.actualizarNota(idAluSelec, idMateria, nuevaNota);
+        }
+    }
+    }//GEN-LAST:event_btnGuardarNotaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
