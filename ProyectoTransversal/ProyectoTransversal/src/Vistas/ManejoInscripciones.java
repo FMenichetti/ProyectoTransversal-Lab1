@@ -26,7 +26,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
     MateriaData mData;
     AlumnoData aData;
     Alumno alumno;
-List<Materia> materias;
+    List<Materia> materias;
     private DefaultTableModel tabla ;
 
     public ManejoInscripciones() {
@@ -110,7 +110,7 @@ List<Materia> materias;
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true
+                false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -258,6 +258,7 @@ List<Materia> materias;
         // TODO add your handling code here:
         
         anularInscripcion();
+        
 
     }//GEN-LAST:event_btnAnularInscripActionPerformed
 
@@ -314,8 +315,10 @@ List<Materia> materias;
             
             iData.borrarInscripcionMateriaAlumno(idAlumno, idMateria);
             limpiarTabla();
-            jrbMatInscrip.setSelected(false);
-            jrbMatNoInscrip.setSelected(false);
+            listarTabla(materias);
+            buttonGroup1.clearSelection();
+//            jrbMatInscrip.setSelected(false);
+//            jrbMatNoInscrip.setSelected(false);
         }
     }
     
@@ -333,8 +336,10 @@ List<Materia> materias;
             Inscripcion i = new Inscripcion(alumno, materia, 0);
             iData.guardarInscripcion(i);
             limpiarTabla();
-            jrbMatInscrip.setSelected(false);
-            jrbMatNoInscrip.setSelected(false);
+            listarTabla(materias);
+            buttonGroup1.clearSelection();
+//            jrbMatInscrip.setSelected(false);
+//            jrbMatNoInscrip.setSelected(false);
         }
     }
 
