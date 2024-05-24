@@ -1,6 +1,7 @@
 package Vistas;
 
 import AccesoDatos.MateriaData;
+import javax.swing.JInternalFrame;
 
 /**
  *
@@ -142,6 +143,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jmiFormAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiFormAlumnoActionPerformed
@@ -153,6 +155,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         fa.setVisible(true); //La hacemos visible
         escritorio.add(fa); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(fa); //Le decimos al escritorio que traiga al frente nuestra ventana
+        centrarVentana(fa);
     }//GEN-LAST:event_jmiFormAlumnoActionPerformed
 
     private void jmiFormMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiFormMateriaActionPerformed
@@ -164,6 +167,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         fm.setVisible(true); //La hacemos visible
         escritorio.add(fm); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(fm); //Le decimos al escritorio que traiga al frente nuestra ventana
+        centrarVentana(fm);
     }//GEN-LAST:event_jmiFormMateriaActionPerformed
 
     private void jmiManejoInscripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiManejoInscripActionPerformed
@@ -175,6 +179,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         mi.setVisible(true); //La hacemos visible
         escritorio.add(mi); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(mi); //Le decimos al escritorio que traiga al frente nuestra ventana
+        centrarVentana(mi);
     }//GEN-LAST:event_jmiManejoInscripActionPerformed
 
     private void jmiManipNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiManipNotasActionPerformed
@@ -188,6 +193,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         fcn.listarAlumnosEnComboBox();
         escritorio.add(fcn); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(fcn); //Le decimos al escritorio que traiga al frente nuestra ventana
+        centrarVentana(fcn);
     }//GEN-LAST:event_jmiManipNotasActionPerformed
 
     private void jmiAlumnosMatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiAlumnosMatActionPerformed
@@ -203,6 +209,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         am.setVisible(true); //La hacemos visible
         escritorio.add(am); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(am); //Le decimos al escritorio que traiga al frente nuestra ventana
+        centrarVentana(am);
     }//GEN-LAST:event_jmiAlumnosMatActionPerformed
 
     private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
@@ -243,6 +250,20 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 new MenuPrincipal().setVisible(true);
             }
         });
+    }
+    
+    //Este metodo centrara las ventanas
+    public void centrarVentana(JInternalFrame frame){
+        int x = (escritorio.getWidth() / 2) - frame.getWidth() /2;
+        int y = (escritorio.getHeight()/ 2) - frame.getHeight() /2;
+        
+        if (frame.isShowing()) {
+            frame.setLocation(x, y);
+        } else {
+            escritorio.add(frame);
+            frame.setLocation(x, y);
+            frame.show();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

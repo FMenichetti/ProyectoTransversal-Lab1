@@ -375,7 +375,7 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
         if (validaReal(txtCodigo.getText())) {
             codigo = Integer.parseInt(txtCodigo.getText()); 
         } else {
-            JOptionPane.showMessageDialog(null, "El codigo debe ser numerico de maximo 9 digitos");
+            JOptionPane.showMessageDialog(null, "El código debe ser numérico de máximo 9 digitos");
             txtCodigo.setText("");
             txtCodigo.requestFocus();
             return;
@@ -395,7 +395,6 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
         jrbEstado2.setEnabled(true);
         txtAnio.setEnabled(true);    
         txtCodigo.setEnabled(false);
-        System.out.println(""+ matBuscada);
     }//GEN-LAST:event_btnBuscarCodigoActionPerformed
 
     private void btnEliminarMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarMateriaActionPerformed
