@@ -22,15 +22,20 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ManejoInscripciones extends javax.swing.JInternalFrame {
 
-    InscripcionData iData = new InscripcionData();
-    MateriaData mData = new MateriaData();
-    AlumnoData aData = new AlumnoData();
+    InscripcionData iData;
+    MateriaData mData;
+    AlumnoData aData;
     Alumno alumno;
-
-    private DefaultTableModel tabla = new DefaultTableModel();
+List<Materia> materias;
+    private DefaultTableModel tabla ;
 
     public ManejoInscripciones() {
         initComponents();
+        iData = new InscripcionData();
+        mData = new MateriaData();
+        aData = new AlumnoData();
+        tabla = new DefaultTableModel();
+        materias = new ArrayList<>();
         cargaAlumnosJCombo();
         pintarColumnasTabla();
         limpiarTabla();
@@ -86,7 +91,6 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
         });
 
         buttonGroup1.add(jrbMatInscrip);
-        jrbMatInscrip.setSelected(true);
         jrbMatInscrip.setText("Materias Inscriptas");
         jrbMatInscrip.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -116,6 +120,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTablaInscrip);
 
         btnInscribir.setText("Inscribir");
+        btnInscribir.setEnabled(false);
         btnInscribir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInscribirActionPerformed(evt);
@@ -123,6 +128,12 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
         });
 
         btnAnularInscrip.setText("Anular Inscripción");
+        btnAnularInscrip.setEnabled(false);
+        btnAnularInscrip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnularInscripActionPerformed(evt);
+            }
+        });
 
         btnSalirInscrip.setText("Salir");
         btnSalirInscrip.addActionListener(new java.awt.event.ActionListener() {
@@ -219,14 +230,10 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
     private void jrbMatNoInscripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbMatNoInscripActionPerformed
         // TODO add your handling code here:
         //Materias no inscriptas
-        List<Materia> materias = new ArrayList<>();
-        limpiarTabla();
-        alumno = (Alumno)jComboInscrip.getSelectedItem();
-        if (jrbMatNoInscrip.isSelected()) {
-            materias = iData.obtenerMateriasNOCursadas(alumno.getIdAlumno());
-        }
-
-        listarTabla(materias);
+        
+        listarTabla( obtenerNoInscriptas() );
+        btnInscribir.setEnabled(true);
+        btnAnularInscrip.setEnabled(false);
     }//GEN-LAST:event_jrbMatNoInscripActionPerformed
 
     private void jComboInscripItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboInscripItemStateChanged
@@ -236,23 +243,23 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
 
     private void jrbMatInscripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbMatInscripActionPerformed
         // TODO add your handling code here:
-        List<Materia> materias = new ArrayList<>();
-        limpiarTabla();
-        alumno = (Alumno)jComboInscrip.getSelectedItem();
-        if (jrbMatInscrip.isSelected()) {
-            materias = iData.obtenerMateriasCursadas(alumno.getIdAlumno());
-        }
-
-        listarTabla(materias);
+        
+        listarTabla(obtenerInscriptas());
+        btnInscribir.setEnabled(false);
+        btnAnularInscrip.setEnabled(true);
     }//GEN-LAST:event_jrbMatInscripActionPerformed
 
     private void btnInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscribirActionPerformed
         // TODO add your handling code here:
-        alumno = (Alumno)jComboInscrip.getSelectedItem();
-        
-        Inscripcion i = new Inscripcion();
-        iData.guardarInscripcion(i);
+        inscribir();
     }//GEN-LAST:event_btnInscribirActionPerformed
+
+    private void btnAnularInscripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnularInscripActionPerformed
+        // TODO add your handling code here:
+        
+        anularInscripcion();
+
+    }//GEN-LAST:event_btnAnularInscripActionPerformed
 
     private void cargaAlumnosJCombo() {
 
@@ -276,6 +283,59 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
         tabla.addColumn("Id");
         tabla.addColumn("Nombre");
         tabla.addColumn("Año");
+    }
+    
+    private List<Materia> obtenerNoInscriptas(){
+        materias = null;
+        limpiarTabla();
+        alumno = (Alumno)jComboInscrip.getSelectedItem();
+        if (jrbMatNoInscrip.isSelected()) {
+            materias = iData.obtenerMateriasNOCursadas(alumno.getIdAlumno());
+        }
+        return materias;
+    }
+    
+    private List<Materia> obtenerInscriptas(){
+        materias = null;
+        limpiarTabla();
+        alumno = (Alumno)jComboInscrip.getSelectedItem();
+        if (jrbMatInscrip.isSelected()) {
+            materias = iData.obtenerMateriasCursadas(alumno.getIdAlumno());
+        }
+        return materias;
+    }
+    
+    private void anularInscripcion(){
+        int filaSeleccionada = jTablaInscrip.getSelectedRow();
+        if (filaSeleccionada != -1 ) {
+            
+            int idMateria = (Integer)tabla.getValueAt(filaSeleccionada, 0);
+            int idAlumno = ((Alumno)jComboInscrip.getSelectedItem()).getIdAlumno();
+            
+            iData.borrarInscripcionMateriaAlumno(idAlumno, idMateria);
+            limpiarTabla();
+            jrbMatInscrip.setSelected(false);
+            jrbMatNoInscrip.setSelected(false);
+        }
+    }
+    
+    private void inscribir(){
+        alumno = (Alumno)jComboInscrip.getSelectedItem();
+        
+        int filaSeleccionada = jTablaInscrip.getSelectedRow();
+        if (filaSeleccionada != -1 ) {
+            
+            int idMateria = (Integer)tabla.getValueAt( filaSeleccionada, 0);
+            String nombre = (String)tabla.getValueAt( filaSeleccionada, 1);
+            int anio = (Integer)tabla.getValueAt( filaSeleccionada, 2);
+            Materia materia = new Materia(idMateria, nombre, anio, true);
+            
+            Inscripcion i = new Inscripcion(alumno, materia, 0);
+            iData.guardarInscripcion(i);
+            limpiarTabla();
+            jrbMatInscrip.setSelected(false);
+            jrbMatNoInscrip.setSelected(false);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
