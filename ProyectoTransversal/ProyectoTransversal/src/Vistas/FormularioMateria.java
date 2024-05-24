@@ -367,13 +367,13 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
             limpiar();
             return;
         }
-        
+
         String nombre;
         int anio;
         boolean estado;
         Integer codigo = null;
         if (validaReal(txtCodigo.getText())) {
-            codigo = Integer.parseInt(txtCodigo.getText()); 
+            codigo = Integer.parseInt(txtCodigo.getText());
         } else {
             JOptionPane.showMessageDialog(null, "El código debe ser numérico de máximo 9 digitos");
             txtCodigo.setText("");
@@ -384,7 +384,7 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
         mat = md.buscarMateria(codigo);
         if (mat != null) {
             matBuscada = true;
-        }else{
+        } else {
             return;
         }
         txtNombreMateria.setText("" + mat.getNombre());
@@ -393,7 +393,7 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
         btnEliminarMateria.setEnabled(true);
         txtNombreMateria.setEnabled(true);
         jrbEstado2.setEnabled(true);
-        txtAnio.setEnabled(true);    
+        txtAnio.setEnabled(true);
         txtCodigo.setEnabled(false);
     }//GEN-LAST:event_btnBuscarCodigoActionPerformed
 
@@ -417,14 +417,22 @@ public class FormularioMateria extends javax.swing.JInternalFrame {
             boolean estado = false;
             String nombre = "";
 
-            if (validaReal(txtAnio.getText()) && !txtNombre1.getText().isEmpty()) {
-                anio = Integer.parseInt(txtAnio.getText());
-                estado = jrbEstado2.isSelected();
+            if (!txtNombreMateria.getText().isEmpty()) {
+                if (validaReal(txtAnio.getText())) {
+
+                    anio = Integer.parseInt(txtAnio.getText());
+                    estado = jrbEstado2.isSelected();
+                } else {
+                    JOptionPane.showMessageDialog(null, "recuerde que el año debe ser numerico");
+                    txtAnio.setText("");
+                    txtAnio.requestFocus();
+                    return;
+                }
                 nombre = txtNombreMateria.getText();
             } else {
-                JOptionPane.showMessageDialog(null, "Rellene todos los campos y recuerde que el año debe ser numerico");
-                txtAnio.setText("");
-                txtAnio.requestFocus();
+                JOptionPane.showMessageDialog(null, "Rellene todos los campos");
+                txtNombreMateria.setText("");
+                txtNombreMateria.requestFocus();
                 return;
             }
 
