@@ -180,15 +180,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private void jmiManipNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jmiManipNotasActionPerformed
         // TODO add your handling code here:
         
-        FormularioCargaNotas fcn = new FormularioCargaNotas(); //Instancia de la ventana FormularioCargaNotas
-        
-        // Llamamos al metodo para cargar los alumnos en el combo box
-        fcn.listarAlumnosEnComboBox();
-
         escritorio.removeAll(); //Removemos todo lo que tenga nuestro escritorio
         escritorio.repaint(); //Volvemos a repintar el escritorio
-        
+        FormularioCargaNotas fcn = new FormularioCargaNotas(); //Instancia de la ventana FormularioCargaNotas
         fcn.setVisible(true); //La hacemos visible
+        // Llamamos al metodo para cargar los alumnos en el combo box
+        fcn.listarAlumnosEnComboBox();
         escritorio.add(fcn); //Agregamos nuestra ventana al escritorio
         escritorio.moveToFront(fcn); //Le decimos al escritorio que traiga al frente nuestra ventana
     }//GEN-LAST:event_jmiManipNotasActionPerformed

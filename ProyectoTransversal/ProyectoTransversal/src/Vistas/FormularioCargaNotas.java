@@ -6,6 +6,8 @@ import Entidades.Alumno;
 import Entidades.Inscripcion;
 import Entidades.Materia;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -85,9 +87,15 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTablaNotas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTablaNotasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTablaNotas);
 
         btnGuardarNota.setText("Guardar");
+        btnGuardarNota.setEnabled(false);
         btnGuardarNota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarNotaActionPerformed(evt);
@@ -153,7 +161,9 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnSalirNotasActionPerformed
 
     private void jComboNotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboNotasActionPerformed
-
+        //Descativo el boton guardar 
+        btnGuardarNota.setEnabled(false);
+        
         // Obtenemos el nombre del alumno seleccionado en el combo box
         String nombreCompletoAlumno = (String) jComboNotas.getSelectedItem();
 
@@ -208,16 +218,34 @@ public class FormularioCargaNotas extends javax.swing.JInternalFrame {
         }
         if (idAluSelec != -1) {
             int idMateria = (Integer) modeloTabla.getValueAt(filaSeleccionada, 0);
-            double nuevaNota = Double.parseDouble(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
-            
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro que desea actualizar la nota?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (validaReal(modeloTabla.getValueAt(filaSeleccionada, 2).toString())) {
+                double nuevaNota = Double.parseDouble(modeloTabla.getValueAt(filaSeleccionada, 2).toString());
+                int confirmacion = JOptionPane.showConfirmDialog(this, "Actualizar nota de " + nombreCompletoAlumno, "Confirmar", JOptionPane.YES_NO_OPTION);
             if (confirmacion == JOptionPane.YES_OPTION) {
                 inscripcionData.actualizarNota(idAluSelec, idMateria, nuevaNota);
+                listarAlumnosEnComboBox();
             }
+            } else{
+                JOptionPane.showMessageDialog(rootPane, "Ingrese un valor real");
+            }
+            
+            
         }
     }
     }//GEN-LAST:event_btnGuardarNotaActionPerformed
 
+    private void jTablaNotasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablaNotasMouseClicked
+        // TODO add your handling code here:       
+        
+        btnGuardarNota.setEnabled(true);
+    }//GEN-LAST:event_jTablaNotasMouseClicked
+    
+    private boolean validaReal(String nro){
+    Pattern patron=Pattern.compile("^\\d+(\\.\\d+)?$");
+        Matcher m=patron.matcher(nro);
+        return m.matches();
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardarNota;
