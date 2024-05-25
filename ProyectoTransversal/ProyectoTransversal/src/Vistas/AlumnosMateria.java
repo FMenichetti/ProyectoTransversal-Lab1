@@ -4,6 +4,8 @@ import AccesoDatos.InscripcionData;
 import AccesoDatos.MateriaData;
 import Entidades.Alumno;
 import Entidades.Materia;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,17 +16,25 @@ public class AlumnosMateria extends javax.swing.JInternalFrame {
     }
 
     public void listarMateriasEnComboBox() {
-        MateriaData md = new MateriaData();
-        List<Materia> materias = md.listarMateria();
+    MateriaData md = new MateriaData();
+    List<Materia> materias = md.listarMateria();
 
-        // Limpiar el combo box antes de agregar las materias
-        jComboAlumnoMateria.removeAllItems();
-
-        // Agregar cada materia al combo box
-        for (Materia materia : materias) {
-            jComboAlumnoMateria.addItem(materia.getNombre());
+    // Ordenar la lista de materias por nombre
+    Collections.sort(materias, new Comparator<Materia>() {
+        @Override
+        public int compare(Materia m1, Materia m2) {
+            return m1.getNombre().compareTo(m2.getNombre());
         }
+    });
+
+    // Limpiar el combo box antes de agregar las materias
+    jComboAlumnoMateria.removeAllItems();
+
+    // Agregar cada materia al combo box
+    for (Materia materia : materias) {
+        jComboAlumnoMateria.addItem(materia.getNombre());
     }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -129,47 +139,56 @@ public class AlumnosMateria extends javax.swing.JInternalFrame {
 
     private void jComboAlumnoMateriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboAlumnoMateriaActionPerformed
         // Obtenemos el nombre de la materia seleccionada en el combo box
-        String nombreMateria = (String) jComboAlumnoMateria.getSelectedItem();
+    String nombreMateria = (String) jComboAlumnoMateria.getSelectedItem();
 
-        //Creamos una instancia de MateriaData
-        MateriaData materiaData = new MateriaData();
+    //Creamos una instancia de MateriaData
+    MateriaData materiaData = new MateriaData();
 
-        //Guardamos el id de la materia en una variable
-        int idMatSelec = -1; // inicializamos en -1
+    //Guardamos el id de la materia en una variable
+    int idMatSelec = -1; // inicializamos en -1
 
-        //Recorremos y buscamos la materia seleccionada en la lista
-        for (Materia materia : materiaData.listarMateria()) {
-            if (materia.getNombre().equals(nombreMateria)) {
-                //Si se encontro la materia seleccionada, obtenemos su id
-                idMatSelec = materia.getIdMateria();
-                break; //salimos del bucle cuando se encuentra la materia
-            }
+    //Recorremos y buscamos la materia seleccionada en la lista
+    for (Materia materia : materiaData.listarMateria()) {
+        if (materia.getNombre().equals(nombreMateria)) {
+            //Si se encontro la materia seleccionada, obtenemos su id
+            idMatSelec = materia.getIdMateria();
+            break; //salimos del bucle cuando se encuentra la materia
         }
+    }
 
-        //Verificamos si se encontro la materia seleccionada
-        if (idMatSelec != -1) {
-            //Creamos una instancia de InscripcionData
-            InscripcionData iData = new InscripcionData();
+    //Verificamos si se encontro la materia seleccionada
+    if (idMatSelec != -1) {
+        //Creamos una instancia de InscripcionData
+        InscripcionData iData = new InscripcionData();
 
-            // Obtenemos la lista de alumnos inscritos en la materia seleccionada
-            List<Alumno> alumnos = iData.obtenerAlumnosXMaterias(idMatSelec);
+        // Obtenemos la lista de alumnos inscritos en la materia seleccionada
+        List<Alumno> alumnos = iData.obtenerAlumnosXMaterias(idMatSelec);
 
-            //Obtenemos el modelo de la tabla
-            DefaultTableModel modeloTabla = (DefaultTableModel) jTablaAlumnoMateria.getModel();
-
-            //Limpiamos el contenido de la tabla
-            modeloTabla.setRowCount(0);
-
-            //Ahora vamos a recorrer la lista de alumnos y lo agregaremosa la tabla
-            for (Alumno alumno : alumnos) {
-                //Creams un array con los datos del alumno
-                Object[] rowData = {alumno.getIdAlumno(), alumno.getDni(), alumno.getApellido(), alumno.getNombre()};
-
-                //Agregamos la fila a la tabla
-                modeloTabla.addRow(rowData);
+        // Ordenar la lista de alumnos por apellido y nombre
+        Collections.sort(alumnos, new Comparator<Alumno>() {
+            @Override
+            public int compare(Alumno a1, Alumno a2) {
+                String nombreCompleto1 = a1.getApellido() + ", " + a1.getNombre();
+                String nombreCompleto2 = a2.getApellido() + ", " + a2.getNombre();
+                return nombreCompleto1.compareTo(nombreCompleto2);
             }
+        });
 
+        //Obtenemos el modelo de la tabla
+        DefaultTableModel modeloTabla = (DefaultTableModel) jTablaAlumnoMateria.getModel();
+
+        //Limpiamos el contenido de la tabla
+        modeloTabla.setRowCount(0);
+
+        //Ahora vamos a recorrer la lista de alumnos y lo agregaremosa la tabla
+        for (Alumno alumno : alumnos) {
+            //Creams un array con los datos del alumno
+            Object[] rowData = {alumno.getIdAlumno(), alumno.getDni(), alumno.getApellido(), alumno.getNombre()};
+
+            //Agregamos la fila a la tabla
+            modeloTabla.addRow(rowData);
         }
+    }
 
 
     }//GEN-LAST:event_jComboAlumnoMateriaActionPerformed
