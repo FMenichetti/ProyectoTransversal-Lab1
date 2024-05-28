@@ -11,6 +11,9 @@ import javax.swing.JOptionPane;
 import java.util.regex.*;
 
 public class FormularioAlumno extends javax.swing.JInternalFrame {
+    
+    private Alumno alumno = null;
+    private AlumnoData acceso = new AlumnoData();
 
     /**
      * Creates new form FormularioAlumno
@@ -199,24 +202,21 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
 
     private void btnBuscarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarAlumnoActionPerformed
         // TODO add your handling code here:
-        AlumnoData acceso = new AlumnoData();
-        Alumno alumno = null;
-        Integer dni = null;
-        Date nacimiento = new Date(0);
 
+        Date nacimiento = new Date(0);
         if (patronDni(txtDni.getText())) {
             JOptionPane.showMessageDialog(rootPane, "porfavor inserte un dni valido(solo numeros max8)");
             txtDni.requestFocus();
             return;
         } else {
-
+            
             if (txtDni.getText().toString().length() != 0) {
-                alumno = acceso.buscarAlumnoPorDni(dni = Integer.valueOf(txtDni.getText()));
+                alumno = acceso.buscarAlumnoPorDni(Integer.valueOf(txtDni.getText()));
             } else {
                 JOptionPane.showMessageDialog(rootPane, "por favor rellene el campo dni");
                 return;
             }
-
+            
             if (alumno != null) {
                 nacimiento = Date.valueOf(alumno.getFechaNacimiento());
                 jrbEstado.setSelected(alumno.isEstado());
@@ -225,9 +225,9 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
                 txtNombre.setText(alumno.getNombre());
                 btnEliminarAlumno.setEnabled(true);
             }
-
+            
         }
-
+        
 
     }//GEN-LAST:event_btnBuscarAlumnoActionPerformed
 
@@ -239,69 +239,96 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
         txtApellido.setText("");
         txtNombre.setText("");
         btnEliminarAlumno.setEnabled(false);
+        alumno = null;
 
     }//GEN-LAST:event_btnNuevoAlumnoActionPerformed
 
     private void btnEliminarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarAlumnoActionPerformed
         // TODO add your handling code here:
 
-        AlumnoData acceso = new AlumnoData();
-        Alumno alumno = null;
-
         alumno = acceso.buscarAlumnoPorDni(Integer.valueOf(txtDni.getText()));
         acceso.eliminarAlumno(alumno.getIdAlumno());
 
         //limpieza de campos y desabilitacion del boton
         btnNuevoAlumnoActionPerformed(evt);
-
+        
 
     }//GEN-LAST:event_btnEliminarAlumnoActionPerformed
 
     private void btnGuardarAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarAlumnoActionPerformed
         // TODO add your handling code here:
 
-        AlumnoData acceso = new AlumnoData();
-        Alumno alumno = new Alumno();
-
-        if (txtApellido.getText().length() <= 0) {
-            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un apellido");
-            txtApellido.requestFocus();
-        } else if (txtNombre.getText().length() <= 0) {
-            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un nombre");
-            txtNombre.requestFocus();
-        } else if (txtDni.getText().length() <= 0) {
-
-            JOptionPane.showMessageDialog(rootPane, "por favor ingrese un DNI");
-            txtDni.requestFocus();
+        if (alumno == null) {
+            guardarAlumno();
+            btnNuevoAlumnoActionPerformed(evt);
         } else {
-            if (patronDni(txtDni.getText())) {
-                JOptionPane.showMessageDialog(rootPane, "porfavor inserte un dni valido(solo numeros max8)");
-                return;
-            }
-            int dni = Integer.parseInt(txtDni.getText());
-
-            alumno.setApellido(txtApellido.getText());
-            alumno.setNombre(txtNombre.getText());
-
-            alumno.setDni(dni);
-            alumno.setEstado(jrbEstado.isSelected());
-
-            //TODO MAL CON EL JDCALENDAR 
-            alumno.setFechaNacimiento(jdNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
-
-            acceso.guardarAlumno(alumno);
-
+            editarAlumno();
+            btnNuevoAlumnoActionPerformed(evt);
         }
-
+        
 
     }//GEN-LAST:event_btnGuardarAlumnoActionPerformed
-
+    
     private boolean patronDni(String dni) {
         //TRUE si el dni contiene cualquier cosa que no sea un numero
         Pattern patron = Pattern.compile("\\D+|.{9,}");
         Matcher comparador = patron.matcher(dni);
-
+        
         return comparador.find();
+    }
+
+    //guardaralumno
+    private void guardarAlumno() {
+        Alumno alumnonuevo = new Alumno();
+        if (txtDni.getText().isBlank() || patronDni(txtDni.getText())) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor numerico valido en el dni");
+            txtDni.requestFocus();
+            return;
+        } else if (txtApellido.getText().isBlank()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el apellido");
+            txtApellido.requestFocus();
+            return;
+        } else if (txtNombre.getText().isBlank()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el nombre");
+            txtNombre.requestFocus();
+            return;
+        }
+        
+        alumnonuevo.setDni(Integer.parseInt(txtDni.getText()));
+        alumnonuevo.setApellido(txtApellido.getText());
+        alumnonuevo.setNombre(txtNombre.getText());
+        alumnonuevo.setEstado(jrbEstado.isSelected());
+        alumnonuevo.setFechaNacimiento(jdNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        
+        alumno = alumnonuevo;
+        acceso.guardarAlumno(alumno);
+        
+    }
+
+    //editarAlumno
+    private void editarAlumno() {
+        
+        if (txtDni.getText().isBlank() || patronDni(txtDni.getText())) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor numerico valido en el dni");
+            txtDni.requestFocus();
+            return;
+        } else if (txtApellido.getText().isBlank()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el apellido");
+            txtApellido.requestFocus();
+            return;
+        } else if (txtNombre.getText().isBlank()) {
+            JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el nombre");
+            txtNombre.requestFocus();
+            return;
+        }
+        
+        alumno.setDni(Integer.valueOf(txtDni.getText()));
+        alumno.setApellido(txtApellido.getText());
+        alumno.setNombre(txtNombre.getText());
+        alumno.setEstado(jrbEstado.isSelected());
+        alumno.setFechaNacimiento(jdNacimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        acceso.modificarAlumno(alumno);
+        
     }
 
     //editor de texto del jdatechooser
