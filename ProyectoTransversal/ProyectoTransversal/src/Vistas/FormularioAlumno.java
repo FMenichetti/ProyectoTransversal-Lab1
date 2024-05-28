@@ -280,15 +280,15 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
     //guardaralumno
     private void guardarAlumno() {
         Alumno alumnonuevo = new Alumno();
-        if (txtDni.getText().isBlank() || patronDni(txtDni.getText())) {
+        if (txtDni.getText().isEmpty()|| patronDni(txtDni.getText())) {
             JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor numerico valido en el dni");
             txtDni.requestFocus();
             return;
-        } else if (txtApellido.getText().isBlank()) {
+        } else if (txtApellido.getText().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el apellido");
             txtApellido.requestFocus();
             return;
-        } else if (txtNombre.getText().isBlank()) {
+        } else if (txtNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el nombre");
             txtNombre.requestFocus();
             return;
@@ -308,15 +308,15 @@ public class FormularioAlumno extends javax.swing.JInternalFrame {
     //editarAlumno
     private void editarAlumno() {
         
-        if (txtDni.getText().isBlank() || patronDni(txtDni.getText())) {
+        if (txtDni.getText().isEmpty() || patronDni(txtDni.getText())) {
             JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor numerico valido en el dni");
             txtDni.requestFocus();
             return;
-        } else if (txtApellido.getText().isBlank()) {
+        } else if (txtApellido.getText().isEmpty() ) {
             JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el apellido");
             txtApellido.requestFocus();
             return;
-        } else if (txtNombre.getText().isBlank()) {
+        } else if (txtNombre.getText().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "Por favor ingrese un valor valido en el nombre");
             txtNombre.requestFocus();
             return;
