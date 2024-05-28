@@ -54,7 +54,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
         buttonGroup5 = new javax.swing.ButtonGroup();
         jLabel18 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jComboInscrip = new javax.swing.JComboBox<>();
+        jComboInscrip = new javax.swing.JComboBox();
         jLabel19 = new javax.swing.JLabel();
         jrbMatNoInscrip = new javax.swing.JRadioButton();
         jrbMatInscrip = new javax.swing.JRadioButton();
@@ -268,7 +268,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
         // Despliegue de lista de alumnos
         List<Alumno> lista = aData.listarAlumno();
         for (Alumno alumno : lista) {
-            jComboInscrip.addItem(alumno.getNombre() + " " + alumno.getApellido());
+            jComboInscrip.addItem(alumno);
         }
     }
 
@@ -348,7 +348,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
     private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.ButtonGroup buttonGroup4;
     private javax.swing.ButtonGroup buttonGroup5;
-    private javax.swing.JComboBox<String> jComboInscrip;
+    private javax.swing.JComboBox jComboInscrip;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
