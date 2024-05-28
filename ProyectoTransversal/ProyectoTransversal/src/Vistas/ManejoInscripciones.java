@@ -100,13 +100,10 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
 
         jTablaInscrip.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
-                "ID", "Nombre", "Año"
+                "Id", "Nombre", "Anio"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -159,26 +156,26 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
                 .addComponent(jrbMatNoInscrip)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jrbMatInscrip)
-                .addGap(49, 49, 49))
+                .addGap(130, 130, 130))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(17, 17, 17)
+                            .addComponent(jLabel13)
+                            .addGap(34, 34, 34)
+                            .addComponent(jComboInscrip, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(147, 147, 147)
+                                .addComponent(jLabel19))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jLabel13)
-                        .addGap(34, 34, 34)
-                        .addComponent(jComboInscrip, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(147, 147, 147)
-                            .addComponent(jLabel19))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(19, 19, 19)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(20, 20, 20))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(137, 137, 137)
-                .addComponent(jLabel18)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(137, 137, 137)
+                        .addComponent(jLabel18)))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +193,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
                     .addComponent(jrbMatNoInscrip)
                     .addComponent(jrbMatInscrip))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInscribir)
@@ -241,6 +238,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
     private void jComboInscripItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboInscripItemStateChanged
         // TODO add your handling code here:
         limpiarTabla();
+        buttonGroup1.clearSelection();
     }//GEN-LAST:event_jComboInscripItemStateChanged
 
     private void jrbMatInscripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jrbMatInscripActionPerformed
@@ -254,13 +252,14 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
     private void btnInscribirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInscribirActionPerformed
         // TODO add your handling code here:
         inscribir();
+        limpiarTabla();
     }//GEN-LAST:event_btnInscribirActionPerformed
 
     private void btnAnularInscripActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnularInscripActionPerformed
         // TODO add your handling code here:
         
         anularInscripcion();
-        
+        limpiarTabla();
 
     }//GEN-LAST:event_btnAnularInscripActionPerformed
 
@@ -282,10 +281,8 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
     }
 
     private void pintarColumnasTabla() {
-        jTablaInscrip.setModel(tabla);
-        tabla.addColumn("Id");
-        tabla.addColumn("Nombre");
-        tabla.addColumn("Año");
+        tabla = (DefaultTableModel)jTablaInscrip.getModel();
+
     }
     
     private List<Materia> obtenerNoInscriptas(){
@@ -316,8 +313,7 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
             int idAlumno = ((Alumno)jComboInscrip.getSelectedItem()).getIdAlumno();
             
             iData.borrarInscripcionMateriaAlumno(idAlumno, idMateria);
-            limpiarTabla();
-            listarTabla(materias);
+            
             buttonGroup1.clearSelection();
 //            jrbMatInscrip.setSelected(false);
 //            jrbMatNoInscrip.setSelected(false);
@@ -337,8 +333,6 @@ public class ManejoInscripciones extends javax.swing.JInternalFrame {
             
             Inscripcion i = new Inscripcion(alumno, materia, 0);
             iData.guardarInscripcion(i);
-            limpiarTabla();
-            listarTabla(materias);
             buttonGroup1.clearSelection();
 //            jrbMatInscrip.setSelected(false);
 //            jrbMatNoInscrip.setSelected(false);
